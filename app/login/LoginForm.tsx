@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -35,7 +37,7 @@ const LoginForm = () => {
 
     if (!isValid) return;
     toast.success("Login Successful");
-
+    router.replace("/"); //or push
     console.log(loginData);
   };
 
