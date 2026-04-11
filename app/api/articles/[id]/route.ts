@@ -4,6 +4,7 @@ import { Article } from "@/app/utils/interfaces";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/schema";
 import { eq } from "drizzle-orm";
+import { verifyToken } from "@/app/utils/verifyToken";
 
 interface UpdatedArticle {
   title?: string;
@@ -37,13 +38,17 @@ export async function GET(
  * @method PUT
  * @route  ~/api/articles/:id
  * @description Update article by id
- * @access Public
+ * @access Private (only admin can update article)
  */
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
+  const user = verifyToken(request);
+  if (!user || !user.isAdmin) {
+    return NextResponse.json({ message: "UnAuthorised" }, { status: 403 });
+  }
   const article = await db
     .select()
     .from(articles)
@@ -69,11 +74,22 @@ export async function PUT(
     { status: 200 },
   );
 }
+
+/**
+ * @method DELETE
+ * @route  ~/api/articles/:id
+ * @description Delete article by id
+ * @access Private (only admin can update article)
+ */
 export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
+  const user = verifyToken(request);
+  if (!user || !user.isAdmin) {
+    return NextResponse.json({ message: "UnAuthorised" }, { status: 403 });
+  }
   const article = await db
     .select()
     .from(articles)

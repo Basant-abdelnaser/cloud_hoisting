@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/schema";
+import { ARTICLE_PER_PAGE } from "@/app/utils/constants";
+import { verifyToken } from "@/app/utils/verifyToken";
 
 /****
  * @method POST
  * @route  ~/api/articles
  * @description Create article
- * @access Public
+ * @access Private (only admin can create article)
  */
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -25,6 +27,11 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
   }
+  const user = verifyToken(request);
+  if (!user || !user.isAdmin) {
+    return NextResponse.json({ message: "UnAuthorised" }, { status: 403 });
+  }
+
   let newArticle;
   try {
     newArticle = await db
@@ -49,13 +56,22 @@ export async function POST(request: NextRequest) {
 /****
  * @method GET
  * @route  ~/api/articles
- * @description Get all articles
+ * @description Get articles by page number
  * @access Public
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const page = request.nextUrl.searchParams.get("page") || "1";
+  const pageNum = Number(page);
+
+  const offset = (pageNum - 1) * ARTICLE_PER_PAGE;
+
   let data;
   try {
-    data = await db.select().from(articles);
+    data = await db
+      .select()
+      .from(articles)
+      .limit(ARTICLE_PER_PAGE)
+      .offset(offset);
   } catch (e) {
     return NextResponse.json(
       { error: "Something went wrong" },
