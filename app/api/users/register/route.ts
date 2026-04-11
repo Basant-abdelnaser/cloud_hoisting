@@ -4,7 +4,8 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
-
+import jwt from "jsonwebtoken";
+import { setCookie } from "@/app/utils/generateToken";
 /**
  * @route POST /api/users/register
  * @description Create new user
@@ -55,15 +56,26 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
     });
 
+    // getuserfromdb
+    const user = await db.select().from(users).where(eq(users.email, email));
+
     // create token
-    const token = null;
+
+    const token = jwt.sign(
+      { id: user[0].id, isAdmin: user[0].isAdmin, username: user[0].username },
+      process.env.JWT_SECRET!,
+      { expiresIn: "3d" },
+    );
+
+    // set cookie
+    const cookie = setCookie(token);
 
     return NextResponse.json(
       {
         message: "User created successfully",
-        data: { email, username, token },
+        data: { email, username },
       },
-      { status: 201 },
+      { status: 201, headers: { "Set-Cookie": cookie } },
     );
   } catch (error) {
     return NextResponse.json(
