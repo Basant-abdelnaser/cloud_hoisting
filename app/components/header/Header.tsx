@@ -23,7 +23,7 @@ const Header = async () => {
       console.log("Error fetching user:", err);
     }
   }
-  return <HeaderClient user={user!} />;
+  return <HeaderClient user={user} />;
 };
 
 export default Header;

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Spinner from "../components/spinner/spinner";
+import { set } from "zod";
 
 const RegisterForm = () => {
   const [RegData, setRegData] = useState({
@@ -15,6 +17,7 @@ const RegisterForm = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [usernameError, setUsernameError] = useState("");
+  const [loading, setloading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,14 +44,18 @@ const RegisterForm = () => {
 
     if (!isValid) return;
     console.log(RegData);
+    setloading(true);
     axios
       .post("http://localhost:3000/api/users/register", RegData)
       .then((res) => {
         toast.success("Registration Successful");
         router.replace("/"); //or push
+        router.refresh();
+        setloading(false);
       })
       .catch((err) => {
         toast.error(err.response.data.error);
+        setloading(false);
       });
   };
 
@@ -89,8 +96,11 @@ const RegisterForm = () => {
       />
       {passwordError && <p className="text-red-600">{passwordError}</p>}
 
-      <button className="bg-purple-900 px-5 py-2 text-white rounded-2xl text-lg hover:bg-purple-700 transition-all duration-300">
-        Register
+      <button
+        className="bg-purple-900 px-5 py-2 text-white rounded-2xl text-lg hover:bg-purple-700 transition-all duration-300 disabled:bg-purple-200"
+        disabled={loading}
+      >
+        {loading ? <Spinner /> : "Register"}
       </button>
     </form>
   );

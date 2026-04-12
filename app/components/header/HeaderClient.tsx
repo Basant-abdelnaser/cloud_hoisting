@@ -1,18 +1,21 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { GrTechnology } from "react-icons/gr";
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { User } from "./Header";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Cookie } from "next/font/google";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { CiLogout } from "react-icons/ci";
 
 const HeaderClient = ({ user }: { user: User | null }) => {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("Home");
+  const router = useRouter();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -26,13 +29,19 @@ const HeaderClient = ({ user }: { user: User | null }) => {
       .get("http://localhost:3000/api/users/logout")
       .then((res) => {
         Cookies.remove("token");
-        toast.success("Logout Successfully");
+        router.replace("/login");
+        router.refresh();
+      })
+      .then(() => {
+        toast.success("Logout Successful");
       })
       .catch((err) => {
         toast.error(err.response.data.error);
       });
   };
-  
+  useEffect(() => {
+    console.log(user);
+  }, [user?.username]);
 
   return (
     <header className="bg-gray-200 shadow-md fixed w-full">
@@ -68,15 +77,20 @@ const HeaderClient = ({ user }: { user: User | null }) => {
         <div className="hidden md:flex gap-4 font-semibold">
           {user ? (
             <>
-              <span className="text-purple-900">{user.username}</span>
+              <div className="flex items-center gap-4">
+                <span className="text-purple-900">
+                  {user.username.toUpperCase()}
+                </span>
 
-              <Link
-                href="/login"
-                onClick={handleLogout}
-                className="hover:bg-red-500 hover:text-white px-4 py-1 rounded-md transition"
-              >
-                Logout
-              </Link>
+                <Link
+                  href="/login"
+                  onClick={handleLogout}
+                  className="hover:bg-red-500 hover:text-white px-4 py-1 rounded-md transition flex items-center gap-1"
+                >
+                  Logout
+                  <CiLogout size={20} />
+                </Link>
+              </div>
             </>
           ) : (
             <>
@@ -122,9 +136,10 @@ const HeaderClient = ({ user }: { user: User | null }) => {
             {user ? (
               <>
                 <span>{user.username}</span>
-                <Link href="/login" onClick={handleLogout}>
+                <p className="cursor-pointer" onClick={handleLogout}>
                   Logout
-                </Link>
+                  <CiLogout size={20} />
+                </p>
               </>
             ) : (
               <>
