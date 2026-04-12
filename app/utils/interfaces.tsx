@@ -1,6 +1,6 @@
- export interface Article {
+export interface Article {
   id: number;
   title: string;
-  body: string;
-  userId: number;
+  description: string;
+  createdAt: Date;
 }

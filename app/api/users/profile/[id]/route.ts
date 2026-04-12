@@ -82,12 +82,32 @@ export async function GET(
  * @access Private (Only user can update their profile)
  */
 
+const updateUserSchema = z.object({
+  email: z.string().email("Invalid email address").optional(),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .optional(),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .optional(),
+});
+
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
   const body = await request.json();
+
+  if (Object.keys(body).length === 0) {
+    return NextResponse.json(
+      { message: "No data provided to update" },
+      { status: 400 },
+    );
+  }
+
   const user = await db
     .select()
     .from(users)
@@ -97,29 +117,35 @@ export async function PUT(
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
 
-  if (body.password) {
-    if (body.password.length < 6) {
-      return NextResponse.json(
-        { message: "Password must be at least 6 characters" },
-        { status: 400 },
-      );
-    }
-    body.password = await bcrypt.hash(body.password, 10);
+  const validation = updateUserSchema.safeParse(body);
+
+  if (!validation.success) {
+    return NextResponse.json(
+      { error: validation.error.issues[0].message },
+      { status: 400 },
+    );
+  }
+
+  const data = validation.data;
+
+  if (data.password) {
+    data.password = await bcrypt.hash(data.password, 10);
   }
 
   const userFromToken = verifyToken(request);
 
-  if (userFromToken !== null && user[0].id !== userFromToken.id) {
+  if (!userFromToken || user[0].id !== userFromToken.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
   }
 
   const updatedUser = await db
     .update(users)
-    .set(body)
+    .set(data)
     .where(eq(users.id, Number(id)))
     .returning();
 
   const { password, ...rest } = updatedUser[0];
+
   return NextResponse.json(
     { message: "User updated successfully", data: rest },
     { status: 200 },

@@ -62,16 +62,15 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const page = request.nextUrl.searchParams.get("page") || "1";
   const pageNum = Number(page);
-
   const offset = (pageNum - 1) * ARTICLE_PER_PAGE;
 
   let data;
   try {
-    data = await db
-      .select()
-      .from(articles)
-      .limit(ARTICLE_PER_PAGE)
-      .offset(offset);
+ 
+    data = await db.query.articles.findMany({
+      limit: ARTICLE_PER_PAGE,
+      offset,
+    });
   } catch (e) {
     return NextResponse.json(
       { error: "Something went wrong" },

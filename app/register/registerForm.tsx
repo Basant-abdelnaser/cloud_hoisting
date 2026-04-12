@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const [RegData, setRegData] = useState({
@@ -13,6 +15,7 @@ const RegisterForm = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [usernameError, setUsernameError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,29 +24,32 @@ const RegisterForm = () => {
 
     if (!RegData.email) {
       setEmailError("Email is required");
-      toast.error("Login Error");
       isValid = false;
     }
     if (!RegData.username) {
       setUsernameError("Username is required");
-      toast.error("Username Error");
       isValid = false;
     }
 
     if (!RegData.password) {
       setPasswordError("Password is required");
-      toast.error("Password Error");
       isValid = false;
     } else if (RegData.password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
-      toast.error("Password Error");
       isValid = false;
     }
 
     if (!isValid) return;
-    toast.success("Login Successful");
-
     console.log(RegData);
+    axios
+      .post("http://localhost:3000/api/users/register", RegData)
+      .then((res) => {
+        toast.success("Registration Successful");
+        router.replace("/"); //or push
+      })
+      .catch((err) => {
+        toast.error(err.response.data.error);
+      });
   };
 
   return (
@@ -60,7 +66,7 @@ const RegisterForm = () => {
       />
       {emailError && <p className="text-red-600">{emailError}</p>}
       <input
-        className={`border-2 border-gray-400 p-2 rounded-lg shadow-md ${emailError ? "border-red-600" : ""}`}
+        className={`border-2 border-gray-400 p-2 rounded-lg shadow-md  ${emailError ? "border-red-600" : ""}`}
         type="text"
         placeholder="username"
         value={RegData.username}
@@ -72,7 +78,7 @@ const RegisterForm = () => {
       {usernameError && <p className="text-red-600">{usernameError}</p>}
 
       <input
-        className={`border-2 border-gray-400 p-2 rounded-lg shadow-md ${passwordError ? "border-red-600" : ""}`}
+        className={`border-2 border-gray-400 p-2 rounded-lg shadow-md  ${passwordError ? "border-red-600" : ""}`}
         type="password"
         placeholder="password"
         value={RegData.password}

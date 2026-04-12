@@ -1,17 +1,54 @@
 "use client";
-import React, { useState } from "react";
+import { ARTICLE_PER_PAGE } from "@/app/utils/constants";
+import axios from "axios";
 
-const pages = [1, 2, 3, 4, 5];
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Pagination = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+
+  const currentPage = Number(searchParams.get("page")) || 1;
+
+  const [pages, setPages] = useState<number[]>([]);
+  const router = useRouter();
+
+  const changePage = (page: number) => {
+    router.push(`/articles?page=${page}`);
+  };
+
+  useEffect(() => {
+    const getArticles = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/api/articles/count`);
+        console.log(res.data.count);
+        // setnumOfPages(Number(res.data.count));
+
+        let allpages = [];
+        for (
+          let i = 1;
+          i <= Math.ceil(res.data.count / ARTICLE_PER_PAGE);
+          i++
+        ) {
+          allpages.push(i);
+        }
+        setPages(allpages);
+        console.log(pages);
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to load articles");
+      }
+    };
+
+    getArticles();
+  }, []);
 
   return (
     <div className="flex justify-center items-center gap-2  mb-5">
-    
       <button
         disabled={currentPage === 1}
-        onClick={() => setCurrentPage((prev) => prev - 1)}
+        onClick={() => changePage(currentPage - 1)}
         className="px-3 py-1 rounded-lg bg-gray-300 disabled:opacity-50"
       >
         Prev
@@ -20,10 +57,7 @@ const Pagination = () => {
       {pages.map((page) => (
         <button
           key={page}
-          onClick={() => {
-            setCurrentPage(page);
-            console.log(page);
-          }}
+          onClick={() => changePage(page)}
           className={`w-10 h-10 rounded-full text-lg transition-all
             ${
               currentPage === page
@@ -37,7 +71,7 @@ const Pagination = () => {
 
       <button
         disabled={currentPage === pages.length}
-        onClick={() => setCurrentPage((prev) => prev + 1)}
+        onClick={() => changePage(currentPage + 1)}
         className="px-3 py-1 rounded-lg bg-gray-300 disabled:opacity-50"
       >
         Next

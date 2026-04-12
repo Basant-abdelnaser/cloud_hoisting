@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { Article } from "@/app/utils/interfaces";
 import { db } from "@/lib/db";
-import { articles } from "@/lib/schema";
+import { articles, comments } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { verifyToken } from "@/app/utils/verifyToken";
 
@@ -24,13 +24,27 @@ export async function GET(
 ) {
   const { id } = await context.params;
 
-  const article = await db
-    .select()
-    .from(articles)
-    .where(eq(articles.id, Number(id)));
-  if (article.length === 0) {
+  const article = await db.query.articles.findFirst({
+    where: eq(articles.id, Number(id)),
+
+    with: {
+      comments: {
+        with: {
+          user: {
+            columns: {
+              username: true,
+            },
+          },
+        },
+        orderBy: (comments, { desc }) => [desc(comments.createdAt)],
+      },
+    },
+  });
+
+  if (!article) {
     return NextResponse.json({ message: "Article not found" }, { status: 404 });
   }
+
   return NextResponse.json(article, { status: 200 });
 }
 

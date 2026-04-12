@@ -4,7 +4,7 @@ import CommentItem from "@/app/components/CommentItem/CommentItem";
 import { Article } from "@/app/utils/interfaces";
 import { useEffect, useState, use } from "react";
 
-interface ArticleDetailsProps {
+export interface ArticleDetailsProps {
   params: Promise<{ id: string }>;
   searchParams: URLSearchParams;
 }

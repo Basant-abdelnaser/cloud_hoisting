@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -15,30 +16,31 @@ const LoginForm = () => {
   const [passwordError, setPasswordError] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
     let isValid = true;
-
+    e.preventDefault();
     if (!loginData.email) {
       setEmailError("Email is required");
-      toast.error("Login Error");
       isValid = false;
     }
-
     if (!loginData.password) {
       setPasswordError("Password is required");
-      toast.error("Password Error");
       isValid = false;
     } else if (loginData.password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
-      toast.error("Password Error");
       isValid = false;
     }
 
     if (!isValid) return;
-    toast.success("Login Successful");
-    router.replace("/"); //or push
-    console.log(loginData);
+
+    axios
+      .post("http://localhost:3000/api/users/login", loginData)
+      .then((res) => {
+        toast.success("Login Successful");
+        router.replace("/"); //or push
+      })
+      .catch((err) => {
+        toast.error(err.response.data.error);
+      });
   };
 
   return (
