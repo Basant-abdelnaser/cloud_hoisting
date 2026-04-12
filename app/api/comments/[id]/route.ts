@@ -35,6 +35,7 @@ export async function PUT(
       .update(comments)
       .set(body)
       .where(eq(comments.id, Number(id)));
+
     return NextResponse.json(
       { message: "Comment updated successfully" },
       { status: 200 },
@@ -93,6 +94,47 @@ export async function DELETE(
       { message: "Comment deleted successfully" },
       { status: 200 },
     );
+  } catch (e) {
+    return NextResponse.json(
+      { message: "internal server error" },
+      { status: 500 },
+    );
+  }
+}
+
+/****
+ * @method GET
+ * @route  ~/api/comments/:id
+ * @description GET comment BY Id
+ * @access PUPLIC
+ */
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  const { id } = await context.params;
+  try {
+    // const comment = await db
+    //   .select()
+    //   .from(comments)
+    //   .where(eq(comments.id, Number(id)));
+    const comment = await db.query.comments.findFirst({
+      where: eq(comments.id, Number(id)),
+      with: {
+        user: {
+          columns: {
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    if (!comment)
+      return NextResponse.json(
+        { message: "Comment not found" },
+        { status: 404 },
+      );
+    return NextResponse.json(comment, { status: 200 });
   } catch (e) {
     return NextResponse.json(
       { message: "internal server error" },

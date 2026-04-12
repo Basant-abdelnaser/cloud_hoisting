@@ -3,7 +3,9 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header/Header";
 import Footer from "./components/Footer/Footer";
- import { ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { getUserFromServer } from "./utils/getUserFromServer";
+import { AuthProvider } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,17 +31,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = getUserFromServer();
+
   return (
     <html
       lang="en"
       className={`${playfairDisplay.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Header />
-        <ToastContainer theme="colored" />
-        {children}
-        <Footer />
-
+        <AuthProvider user={user}>
+          <Header />
+          <ToastContainer theme="colored" />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

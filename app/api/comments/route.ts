@@ -1,6 +1,7 @@
 import { verifyToken } from "@/app/utils/verifyToken";
 import { db } from "@/lib/db";
 import { comments } from "@/lib/schema";
+import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 /****
@@ -44,8 +45,9 @@ export async function POST(request: NextRequest) {
     };
 
     await db.insert(comments).values(newComment);
+    
     return NextResponse.json(
-      { message: "Comment added successfully" },
+      { message: "Comment added successfully", comment: newComment },
       { status: 201 },
     );
   } catch (e) {
