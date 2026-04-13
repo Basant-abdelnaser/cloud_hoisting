@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   }
   const user = verifyToken(request);
   if (!user || !user.isAdmin) {
-    return NextResponse.json({ message: "UnAuthorised" }, { status: 403 });
+    return NextResponse.json({ error: "UnAuthorised" }, { status: 403 });
   }
 
   let newArticle;
@@ -66,7 +66,6 @@ export async function GET(request: NextRequest) {
 
   let data;
   try {
- 
     data = await db.query.articles.findMany({
       limit: ARTICLE_PER_PAGE,
       offset,

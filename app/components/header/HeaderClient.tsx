@@ -58,19 +58,24 @@ const HeaderClient = ({ user }: { user: User | null }) => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-6 font-semibold">
-          {navLinks.map((link) => (
-            <li key={link.name}>
-              <Link
-                href={link.path}
-                className={`hover:text-purple-900 hover:text-xl transition-all duration-300 ${
-                  active === link.name ? "text-purple-900 text-xl" : ""
-                }`}
-                onClick={() => setActive(link.name)}
-              >
-                {link.name}
-              </Link>
-            </li>
-          ))}
+          {navLinks.map((link, index) => {
+            if (!user?.isAdmin) {
+              if (index === 3) return;
+            }
+            return (
+              <li key={link.name}>
+                <Link
+                  href={link.path}
+                  className={`hover:text-purple-900 hover:text-xl transition-all duration-300 ${
+                    active === link.name ? "text-purple-900 text-xl" : ""
+                  }`}
+                  onClick={() => setActive(link.name)}
+                >
+                  {link.name}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         {/* Auth Section */}

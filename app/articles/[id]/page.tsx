@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import EditModal from "@/app/components/EditModal/EditModal";
 
 export interface ArticleDetailsProps {
   params: Promise<{ id: string }>;
@@ -21,7 +22,6 @@ export default function ArticleDetails({ params }: ArticleDetailsProps) {
   const [article, setArticle] = useState<Article | null>(null);
   const [commentsList, setCommnetsList] = useState<IComment[] | null>(null);
   const [user, setUser] = useState<any>(null);
-  const router = useRouter();
 
   const handleDelete = async (id: number) => {
     if (!commentsList) return;
@@ -32,18 +32,6 @@ export default function ArticleDetails({ params }: ArticleDetailsProps) {
 
     setCommnetsList(newCommentsList);
   };
-
-  // const handleEditComment = async (id: number, text: string) => {
-  //   if (!commentsList) return;
-
-  //   const newCommentsList: IComment[] = commentsList.map((comment) => {
-  //     if (comment.id === id) {
-  //       return { ...comment, text: text };
-  //     }
-  //     return comment;
-  //   });
-  //   setCommnetsList(newCommentsList);
-  // };
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/articles/${id}`, {
@@ -57,10 +45,14 @@ export default function ArticleDetails({ params }: ArticleDetailsProps) {
         // router.refresh();
       });
 
-    axios.get(`http://localhost:3000/api/me`).then((res) => {
-      setUser(jwtDecode(res.data.token));
-      console.log(user);
-    });
+    axios
+      .get(`http://localhost:3000/api/me`)
+      .then((res) => {
+        if (!res.data.token) return;
+        setUser(jwtDecode(res.data.token));
+        console.log(user);
+      })
+      .catch((err) => console.log("errooorr", err.response.data.error));
   }, [id]);
 
   if (!article)
@@ -85,7 +77,7 @@ export default function ArticleDetails({ params }: ArticleDetailsProps) {
   };
 
   return (
-    <div className="mt-30 mx-auto w-full lg:w-1/2 md:w-3/4 mb-20">
+    <div className="mt-30 mx-auto w-full lg:w-1/2 md:w-3/4 mb-20 px-5">
       <div className=" bg-gray-100 p-9 rounded-lg shadow-md mb-10 ">
         <h1 className="text-2xl lg:text-3xl  font-bold mb-4">
           {article.title}
@@ -102,9 +94,6 @@ export default function ArticleDetails({ params }: ArticleDetailsProps) {
         <h1 className="text-2xl font-bold mb-4">Comments</h1>
         <div className="flex flex-col gap-4">
           {mappedComments?.length === 0 ? "No comments yet" : mappedComments}
-          {/* {article?.comments?.map((comment: any) => (
-            <h1 key={comment.id}>{comment.text}</h1>
-          ))} */}
         </div>
       </div>
     </div>

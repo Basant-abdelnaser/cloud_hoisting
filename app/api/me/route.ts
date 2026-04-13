@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
   const authToken = request.cookies.get("token")?.value;
   if (!authToken) {
     return NextResponse.json(
-      { message: "No token provided , access denied " },
-      { status: 401 },
+      { message: "No token provided " },
+      { status: 200 },
     );
   }
   return NextResponse.json({ token: authToken }, { status: 200 });
