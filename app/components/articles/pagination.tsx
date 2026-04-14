@@ -3,7 +3,7 @@ import { ARTICLE_PER_PAGE } from "@/app/utils/constants";
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Pagination = () => {
   const searchParams = useSearchParams();
@@ -13,9 +13,16 @@ const Pagination = () => {
 
   const [pages, setPages] = useState<number[]>([]);
   const router = useRouter();
+  const pathname = usePathname();
+  console.log("pathhhh", pathname);
 
   const changePage = (page: number) => {
-    router.push(`/articles?page=${page}`);
+    if (pathname === "/admin/article-table") {
+      router.push(`/admin/article-table?page=${page}`);
+      console.log(page);
+    } else if (pathname === "/articles") {
+      router.push(`/articles?page=${page}`);
+    }
   };
 
   useEffect(() => {

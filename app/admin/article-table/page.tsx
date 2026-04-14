@@ -1,8 +1,10 @@
 import { User } from "@/app/components/header/Header";
+import { Article } from "@/app/utils/interfaces";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
+import ArticlesTable from "./ArticlesTable";
 
 const page = async () => {
   const token = (await cookies()).get("token")?.value;
@@ -14,7 +16,8 @@ const page = async () => {
   if (!user.isAdmin) {
     redirect("/");
   }
-  return <div>Article table</div>;
+
+  return <ArticlesTable />;
 };
 
 export default page;

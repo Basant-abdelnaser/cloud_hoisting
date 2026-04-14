@@ -2,10 +2,15 @@ import { User } from "@/app/components/header/Header";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import React from "react";
-import CommentsTable from "./CommentsTable";
+import ArticleEditForm from "./ArticleEditForm";
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
 
-const page = async () => {
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const id = (await params).id;
   const token = (await cookies()).get("token")?.value;
   console.log("token from admin", token);
   if (!token || token === "undefined") {
@@ -15,11 +20,9 @@ const page = async () => {
   if (!user.isAdmin) {
     redirect("/");
   }
-  return (
-    <div>
-      <CommentsTable />
-    </div>
-  );
+  console.log("id", id);
+  console.log("params", params);
+  return <ArticleEditForm id={id} />;
 };
 
 export default page;
