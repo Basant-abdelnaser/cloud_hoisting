@@ -111,7 +111,7 @@ const HeaderClient = ({ user }: { user: User | null }) => {
 
               <Link
                 href="/register"
-                className="hover:bg-purple-900 hover:text-white px-4 py-1 rounded-md transition"
+                className={`hover:bg-purple-900 hover:text-white px-4 py-1 rounded-md transition  ${pathname === "/register" ? "bg-purple-900 text-white" : ""}`}
               >
                 Register
               </Link>
