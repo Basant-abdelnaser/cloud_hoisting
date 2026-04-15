@@ -72,7 +72,7 @@ const ArticlesTable = () => {
                 className="border-t border-purple-200 hover:bg-purple-50 transition text-center text-sm sm:text-lg md:text-xl"
               >
                 {/* Title */}
-                <td className="px-2 sm:px-4 py-3 sm:py-5 break-words max-w-[140px] sm:max-w-none">
+                <td className="px-2 sm:px-4 py-3 sm:py-5 wrap-break-words max-w-35 sm:max-w-none">
                   {article.title}
                 </td>
 

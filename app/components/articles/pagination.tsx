@@ -65,7 +65,7 @@ const Pagination = () => {
         <button
           key={page}
           onClick={() => changePage(page)}
-          className={`w-6 h-6 rounded-full  transition-all text-sm md:text-lg
+          className={`w-6 h-6 md:w-10 md:h-10 rounded-full  transition-all text-sm md:text-lg
             ${
               currentPage === page
                 ? "bg-purple-900 text-white scale-110"
