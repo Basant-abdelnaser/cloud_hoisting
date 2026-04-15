@@ -26,7 +26,7 @@ const CommentsTable = () => {
 
   const handleDelete = (id: number) => {
     axios
-      .delete(`http://localhost:3000/api/comments/${id}`)
+      .delete(`https://cloud-hoisting-six.vercel.app/api/comments/${id}`)
       .then((res) => {
         toast.success("Comment deleted successfully");
         setComments(comments.filter((comment) => comment.id !== id));
