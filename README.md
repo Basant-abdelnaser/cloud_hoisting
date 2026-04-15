@@ -1,36 +1,177 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ☁️ Cloud Hoisting
 
-## Getting Started
+A full-stack web application built with **Next.js** that allows users to create, manage, and interact with articles and comments through a secure and modern system.
 
-First, run the development server:
+---
+
+##  Live Demo
+
+🔗 https://cloud-hoisting-six.vercel.app/
+
+---
+
+##  Database (Neon)
+
+🔗 https://console.neon.tech/app/projects/mute-credit-56869375/branches/br-fancy-bar-aml9tlai/tables?database=CloudHoisting
+
+---
+
+##  Features
+
+### 👤 Authentication System
+
+* User Registration
+* User Login
+* Secure Authentication
+* Role-based Access (Admin / User)
+
+### 📝 Articles Management
+
+* Create, Read, Update, Delete (CRUD)
+* Rich article structure (Title & Description)
+* Admin-only controls for managing content
+* Pagination for showing articles
+* Search articles
+
+###  Comments System
+
+* Add comments to articles
+* Delete comments (Admin control)
+* Dynamic updates
+
+###  Admin Dashboard
+
+* Manage all articles
+* Manage all comments
+* Clean UI for content control
+
+---
+
+##  Tech Stack
+
+### Frontend
+
+* **Next.js** (App Router)
+* **React**
+* **Tailwind CSS**
+
+### Backend
+
+* **Next.js API Routes**
+
+### Database & ORM
+
+* **PostgreSQL**
+* **Neon** (Serverless Postgres)
+* **Drizzle ORM**
+
+---
+
+## ⚙️ API Structure
+
+The project uses **API routes** in Next.js to handle all backend logic:
+
+###  Auth APIs
+
+* `POST /api/users/register`
+* `POST /api/users/login`
+* `GET /api/users/logout`
+* `DELETE /api/users/profile/:id`
+* `GET /api/users/profile/:id`
+* `GET /api/users/profile/:id`
+
+###  Articles APIs
+
+* `GET /api/articles`
+* `POST /api/articles`
+* `PUT /api/articles/:id`
+* `DELETE /api/articles/:id`
+* `GET /api/articles/:id`
+* `/api/articles/search?q=text`
+
+### 💬 Comments APIs
+
+* `GET /api/comments`
+* `POST /api/comments`
+* `PUT /api/comments/:id`
+* `DELETE /api/comments/:id`
+* `GET /api/comments/:id`
+
+---
+
+## Environment Variables
+
+Create a `.env` file and add:
+
+```env
+DATABASE_URL ="postgresql://neondb_owner:npg_bwn7LxR4DFyG@ep-late-darkness-amsg0pio-pooler.c-5.us-east-1.aws.neon.tech/CloudHoisting?sslmode=require&channel_binding=require"
+DOMAIN ="https://cloud-hoisting-six.vercel.app"
+JWT_SECRET ="privateKey112121##@@"
+NODE_ENV="development"
+```
+
+---
+
+##  Getting Started Locally
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/Basant-abdelnaser/cloud_hoisting.git
+cd cloud_hoisting
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Setup environment variables
+
+Create `.env` and add your Neon database URL.
+
+### 4. Run the project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The project is deployed on **Vercel**.
 
-## Learn More
+### Build Command:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Output Directory:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+.next
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Future Improvements
+* Add user profiles
+* Add likes/reactions system
+* Improve UI/UX design
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Author
+
+**Bsant Abdelnaser**
+
+---
+
+## 📄 License
+
+This project is open-source and available under the MIT License.
+
+---
