@@ -9,12 +9,18 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Cookie } from "next/font/google";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CiLogout } from "react-icons/ci";
+import path from "node:path";
+import { set } from "zod";
 
 const HeaderClient = ({ user }: { user: User | null }) => {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("Home");
+  const pathname = usePathname();
+  const isActive = (path: string) => {
+    if (path === "/") return pathname === "/";
+    return pathname.startsWith(path);
+  };
   const router = useRouter();
 
   const navLinks = [
@@ -44,7 +50,7 @@ const HeaderClient = ({ user }: { user: User | null }) => {
   }, [user?.username]);
 
   return (
-    <header className="bg-gray-200 shadow-md fixed w-full">
+    <header className="bg-gray-200 shadow-md fixed w-full z-70">
       <nav className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link
@@ -56,20 +62,17 @@ const HeaderClient = ({ user }: { user: User | null }) => {
           <span>Hoisting</span>
         </Link>
 
-        {/* Desktop Menu */}
         <ul className="hidden md:flex gap-6 font-semibold">
           {navLinks.map((link, index) => {
-            if (!user?.isAdmin) {
-              if (index === 3) return;
-            }
+            if (!user?.isAdmin && index === 3) return null;
+
             return (
               <li key={link.name}>
                 <Link
                   href={link.path}
-                  className={`hover:text-purple-900 hover:text-xl transition-all duration-300 ${
-                    active === link.name ? "text-purple-900 text-xl" : ""
+                  className={`transition-all duration-300 hover:text-purple-900 hover:text-xl ${
+                    isActive(link.path) ? "text-purple-900 text-xl" : ""
                   }`}
-                  onClick={() => setActive(link.name)}
                 >
                   {link.name}
                 </Link>
@@ -101,15 +104,13 @@ const HeaderClient = ({ user }: { user: User | null }) => {
             <>
               <Link
                 href="/login"
-                onClick={() => setActive("Login")}
-                className="hover:bg-purple-900 hover:text-white px-4 py-1 rounded-md transition"
+                className={`hover:bg-purple-900 hover:text-white px-4 py-1 rounded-md transition  ${pathname === "/login" ? "bg-purple-900 text-white" : ""}`}
               >
                 Login
               </Link>
 
               <Link
                 href="/register"
-                onClick={() => setActive("Register")}
                 className="hover:bg-purple-900 hover:text-white px-4 py-1 rounded-md transition"
               >
                 Register
@@ -117,9 +118,8 @@ const HeaderClient = ({ user }: { user: User | null }) => {
             </>
           )}
         </div>
-
         {/* Mobile Button */}
-        <button className="md:hidden" onClick={() => setOpen(!open)}>
+        <button className="md:hidden z-60" onClick={() => setOpen(!open)}>
           {open ? <X /> : <Menu />}
         </button>
       </nav>
@@ -130,18 +130,29 @@ const HeaderClient = ({ user }: { user: User | null }) => {
           <ul className="flex flex-col gap-4 font-semibold">
             {navLinks.map((link) => (
               <li key={link.name}>
-                <Link href={link.path} onClick={() => setOpen(false)}>
+                <Link
+                  href={link.path}
+                  onClick={() => setOpen(false)}
+                  className={`transition-all duration-300 hover:text-purple-900 hover:text-xl ${
+                    isActive(link.path) ? "text-purple-900 text-xl" : ""
+                  }`}
+                >
                   {link.name}
                 </Link>
               </li>
             ))}
           </ul>
 
-          <div className="flex gap-4 mt-4">
+          <div className="flex items-center gap-4 mt-5 font-semibold">
             {user ? (
               <>
-                <span>{user.username}</span>
-                <p className="cursor-pointer" onClick={handleLogout}>
+                <span className="text-purple-900">
+                  {user.username.toUpperCase()}
+                </span>
+                <p
+                  className="bg-red-500 text-white px-4 py-1 rounded-md transition flex items-center gap-1"
+                  onClick={handleLogout}
+                >
                   Logout
                   <CiLogout size={20} />
                 </p>

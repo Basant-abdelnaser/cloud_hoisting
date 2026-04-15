@@ -24,7 +24,7 @@ export default function SearchArticlesPage() {
   }, [search]);
 
   return (
-    <div className="mt-30 mx-auto ">
+    <div className="mt-30 mx-auto  p-3">
       <h1 className="text-4xl font-bold mb-15  ">
         Search results for <span className="text-purple-900">{search} </span>
       </h1>

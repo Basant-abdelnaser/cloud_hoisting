@@ -50,18 +50,18 @@ const ArticlesTable = () => {
   };
 
   return (
-    <div className="mt-22 px-4 ">
-      <h1 className="text-2xl md:text-3xl font-bold text-purple-900 mb-6">
+    <div className="mt-22 px-2 sm:px-4">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-900 mb-6">
         Articles Table
       </h1>
 
       <div className="overflow-x-auto rounded-lg shadow-md">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-purple-100 text-purple-900 text-2xl">
+        <table className="w-full text-left text-xs sm:text-sm md:text-base">
+          <thead className="bg-purple-100 text-purple-900 text-sm sm:text-lg md:text-2xl">
             <tr className="text-center">
-              <th className="px-4 py-4">Title</th>
-              <th className="px-4 py-4">Created At</th>
-              <th className="px-4 py-6 text-center">Actions</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4">Title</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4">Created At</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-6">Actions</th>
             </tr>
           </thead>
 
@@ -69,33 +69,40 @@ const ArticlesTable = () => {
             {articles.map((article) => (
               <tr
                 key={article.id}
-                className="border-t border-purple-200 hover:bg-purple-50 transition text-xl text-center"
+                className="border-t border-purple-200 hover:bg-purple-50 transition text-center text-sm sm:text-lg md:text-xl"
               >
-                <td className="px-4 py-5">{article.title}</td>
+                {/* Title */}
+                <td className="px-2 sm:px-4 py-3 sm:py-5 break-words max-w-[140px] sm:max-w-none">
+                  {article.title}
+                </td>
 
-                <td className="px-4 py-3 text-gray-600">
+                {/* Date */}
+                <td className="px-2 sm:px-4 py-3 text-gray-600 whitespace-nowrap">
                   {new Date(article.createdAt).toLocaleDateString()}
                 </td>
 
-                <td className="px-4 py-3">
-                  <div className="flex justify-center gap-2">
+                {/* Actions */}
+                <td className="px-2 sm:px-4 py-3">
+                  <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
                     <button
-                      className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm transition cursor-pointer"
+                      className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm transition cursor-pointer"
                       onClick={() => {
                         router.push(`/admin/article-table/edit/${article.id}`);
                       }}
                     >
-                      Edit <FaRegEdit />
+                      <span className="hidden sm:inline">Edit</span>
+                      <FaRegEdit />
                     </button>
 
                     <button
-                      className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm transition cursor-pointer"
+                      className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm transition cursor-pointer"
                       onClick={() => {
                         setDelId(article.id);
                         setOpen(true);
                       }}
                     >
-                      Delete <CiTrash />
+                      <span className="hidden sm:inline">Delete</span>
+                      <CiTrash />
                     </button>
                   </div>
                 </td>
@@ -105,9 +112,10 @@ const ArticlesTable = () => {
         </table>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-6 sm:mt-10 flex justify-center">
         <Pagination />
       </div>
+
       <DeletePopup
         isOpen={open}
         onClose={() => setOpen(false)}

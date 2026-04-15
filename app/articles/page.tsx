@@ -36,8 +36,8 @@ const ArticlesPage = () => {
   if (error) return <h1>{error}</h1>;
 
   return (
-    <div className="mt-20 mx-auto ">
-      <div className="mb-10  ">
+    <div className="mt-20 mx-auto  p-3">
+      <div className="mb-10 max-w-6xl md:mx-8 lg:mx-auto ">
         <SearchArticlesInput />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl  mb-5  md:mx-8 lg:mx-auto">

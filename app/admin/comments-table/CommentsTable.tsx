@@ -39,18 +39,18 @@ const CommentsTable = () => {
   };
 
   return (
-    <div className="mt-22 px-4 ">
-      <h1 className="text-2xl md:text-3xl font-bold text-purple-900 mb-6">
-        Articles Table
+    <div className="mt-18 px-2 sm:px-4">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-900 mb-6">
+        Comments
       </h1>
 
       <div className="overflow-x-auto rounded-lg shadow-md">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-purple-100 text-purple-900 text-2xl">
+        <table className="w-full text-xs sm:text-sm md:text-base text-left">
+          <thead className="bg-purple-100 text-purple-900 text-sm sm:text-lg md:text-2xl">
             <tr className="text-center">
-              <th className="px-4 py-4">Title</th>
-              <th className="px-4 py-4">Created At</th>
-              <th className="px-4 py-6 text-center">Actions</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4">Title</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-4">Created At</th>
+              <th className="px-2 sm:px-4 py-3 sm:py-6 text-center">Actions</th>
             </tr>
           </thead>
 
@@ -58,24 +58,30 @@ const CommentsTable = () => {
             {comments.map((comment) => (
               <tr
                 key={comment.id}
-                className="border-t border-purple-200 hover:bg-purple-50 transition text-xl text-center"
+                className="border-t border-purple-200 hover:bg-purple-50 transition text-sm sm:text-lg md:text-xl text-center"
               >
-                <td className="px-4 py-5">{comment.text}</td>
+                {/* Title */}
+                <td className="px-2 sm:px-4 py-3 sm:py-5 wrap-break-words max-w-37.5 sm:max-w-none">
+                  {comment.text}
+                </td>
 
-                <td className="px-4 py-3 text-gray-600">
+                {/* Date */}
+                <td className="px-2 sm:px-4 py-3 text-gray-600">
                   {new Date(comment.createdAt).toLocaleDateString()}
                 </td>
 
-                <td className="px-4 py-3">
-                  <div className="flex justify-center gap-2">
+                {/* Actions */}
+                <td className="px-2 sm:px-4 py-3">
+                  <div className="flex justify-center">
                     <button
-                      className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm transition cursor-pointer"
+                      className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm transition cursor-pointer"
                       onClick={() => {
                         setDelId(comment.id);
                         setOpen(true);
                       }}
                     >
-                      Delete <CiTrash />
+                      <span className="hidden sm:inline">Delete</span>
+                      <CiTrash />
                     </button>
                   </div>
                 </td>

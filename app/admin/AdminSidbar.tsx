@@ -3,31 +3,47 @@ import React from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdOutlineArticle } from "react-icons/md";
 import { FaRegComments } from "react-icons/fa";
+
 const AdminSidbar = () => {
   return (
-    <div className="h-screen mt-15 bg-gray-200  p-7 shadow-md">
+    <div className="h-screen mt-15 bg-gray-200 p-4 md:p-6 shadow-md w-16 md:w-64 transition-all duration-300 fixed">
+      {/* Dashboard */}
       <Link href="/admin">
-        <div className="flex items-center gap-2 text-purple-900">
+        <div
+          className="flex items-center justify-center md:justify-start gap-3 
+                        text-purple-900 hover:bg-purple-100 p-2 rounded-lg transition"
+        >
           <LuLayoutDashboard size={25} />
-          <h1 className="text-2xl font-bold ">Dashboard</h1>
+          <span className="hidden md:inline text-lg font-bold">Dashboard</span>
         </div>
       </Link>
-      <div>
-        <ul>
-          <Link href="/admin/article-table">
-            <li className="flex items-center gap-2 text-purple-900 mt-5 border-purple-900 border-b-2 w-fit">
-              <h2 className="text-xl font-bold   ">Articles</h2>
-              <MdOutlineArticle size={22} />
-            </li>
-          </Link>
-          <Link href="/admin/comments-table">
-            <li className="flex items-center gap-2 text-purple-900 mt-5 border-purple-900 border-b-2 w-fit">
-              <h2 className="text-xl font-bold   ">Comments</h2>
-              <FaRegComments size={22} />
-            </li>
-          </Link>
-        </ul>
-      </div>
+
+      {/* Links */}
+      <ul className="mt-6 space-y-4">
+        <Link href="/admin/article-table">
+          <li
+            className="flex items-center justify-center md:justify-start gap-3 
+                         text-purple-900 hover:bg-purple-100 p-2 rounded-lg transition cursor-pointer"
+          >
+            <MdOutlineArticle size={25} />
+            <span className="hidden md:inline text-lg font-semibold">
+              Articles
+            </span>
+          </li>
+        </Link>
+
+        <Link href="/admin/comments-table">
+          <li
+            className="flex items-center justify-center md:justify-start gap-3 
+                         text-purple-900 hover:bg-purple-100 p-2 rounded-lg transition cursor-pointer"
+          >
+            <FaRegComments size={25} />
+            <span className="hidden md:inline text-lg font-semibold">
+              Comments
+            </span>
+          </li>
+        </Link>
+      </ul>
     </div>
   );
 };

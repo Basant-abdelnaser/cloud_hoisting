@@ -3,7 +3,6 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { set } from "zod";
 import Spinner from "../components/spinner/spinner";
 
 const AddArticleForm = () => {
@@ -22,67 +21,82 @@ const AddArticleForm = () => {
     let isValid = true;
 
     if (!articleData.title) {
-      settitleError("title is required");
-
+      settitleError("Title is required");
       isValid = false;
     }
 
     if (!articleData.description) {
-      setdescError("decription is required");
+      setdescError("Description is required");
       isValid = false;
     }
 
     if (!isValid) return;
+
     setLoading(true);
+
     axios
       .post("http://localhost:3000/api/articles", articleData)
-      .then((res) => {
+      .then(() => {
         toast.success("Article Added Successfully");
         setArticleData({ title: "", description: "" });
-        setLoading(false);
       })
       .catch((err) => {
-        toast.error(err.response.data.error);
-        console.log(err.response);
-        setLoading(false);
-      });
+        toast.error(err.response?.data?.error || "Something went wrong");
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
-    <div>
-      <form className="flex flex-col gap-7" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+      {/* Title */}
+      <div>
         <input
-          className={`border-2 border-gray-400 p-2 rounded-lg shadow-md ${titleError ? "border-red-600" : ""}`}
           type="text"
-          placeholder="Enter Article Title"
+          placeholder="Article Title"
           value={articleData.title}
           onChange={(e) => {
             setArticleData({ ...articleData, title: e.target.value });
             if (titleError) settitleError("");
           }}
+          className={`w-full border rounded-lg px-3 py-2 text-sm md:text-base
+            focus:outline-none focus:ring-2 focus:ring-purple-500
+            ${titleError ? "border-red-500" : "border-gray-300"}`}
         />
-        {titleError && <p className="text-red-600">{titleError}</p>}
+        {titleError && (
+          <p className="text-red-500 text-sm mt-1">{titleError}</p>
+        )}
+      </div>
 
+      {/* Description */}
+      <div>
         <textarea
-          className={`border-2 border-gray-400 p-2 rounded-lg shadow-md ${descError ? "border-red-600" : ""}`}
-          rows={4}
-          cols={50}
-          placeholder="Enter Article Description"
+          rows={5}
+          placeholder="Article Description"
           value={articleData.description}
           onChange={(e) => {
             setArticleData({ ...articleData, description: e.target.value });
             if (descError) setdescError("");
           }}
+          className={`w-full border rounded-lg px-3 py-2 text-sm md:text-base
+            focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none
+            ${descError ? "border-red-500" : "border-gray-300"}`}
         />
-        {descError && <p className="text-red-600">{descError}</p>}
+        {descError && <p className="text-red-500 text-sm mt-1">{descError}</p>}
+      </div>
 
-        <button
-          className={` px-5 py-2 text-white rounded-2xl text-lg transition-all duration-300 ${loading ? "cursor-not-allowed bg-purple-200 hover:bg-purple-200" : "bg-purple-900 hover:bg-purple-700 cursor-pointer "}`}
-        >
-          {loading ? <Spinner /> : "Add Article"}
-        </button>
-      </form>
-    </div>
+      {/* Button */}
+      <button
+        disabled={loading}
+        className={`w-full py-2.5 rounded-lg text-white font-medium transition
+          ${
+            loading
+              ? "bg-purple-300 cursor-not-allowed"
+              : "bg-purple-700 hover:bg-purple-800"
+          }`}
+      >
+        {loading ? <Spinner /> : "Add Article"}
+      </button>
+    </form>
   );
 };
 
