@@ -59,7 +59,7 @@ const AddComment = ({
     <div>
       <form onSubmit={handleSubmit}>
         <input
-          className={`border-2 border-gray-400 p-2 rounded-lg shadow-md  w-full mb-5 `}
+          className={`border-2 border-gray-400 p-2 rounded-lg shadow-md  w-full mb-5 focus:outline-none focus:ring-2 focus:ring-purple-500 `}
           type="text"
           placeholder="Add New Comment..."
           value={comment}
