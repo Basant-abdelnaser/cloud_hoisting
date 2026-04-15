@@ -46,7 +46,7 @@ export default function ArticleDetails({ params }: ArticleDetailsProps) {
       });
 
     axios
-      .get(`http://localhost:3000/api/me`)
+      .get(`https://cloud-hoisting-six.vercel.app/api/me`)
       .then((res) => {
         if (!res.data.token) return;
         setUser(jwtDecode(res.data.token));
