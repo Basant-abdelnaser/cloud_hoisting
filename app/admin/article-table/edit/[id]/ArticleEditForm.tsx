@@ -33,7 +33,10 @@ const ArticleEditForm = ({ id }: { id: string }) => {
     };
     setLoading(true);
     axios
-      .put(`http://localhost:3000/api/articles/${id}`, updatedArticle)
+      .put(
+        `https://cloud-hoisting-six.vercel.app/api/articles/${id}`,
+        updatedArticle,
+      )
       .then((res) => {
         toast.success(res.data.message);
         setArticle({ title: "", description: "" });
