@@ -37,7 +37,7 @@ const AddComment = ({
           console.log("answer first axios", res.data);
 
           axios
-            .get(`http://localhost:3000/api/articles/${articleId}`)
+            .get(`https://cloud-hoisting-six.vercel.app/api/articles/${articleId}`)
             .then((res) => {
               console.log("answer second axios", res.data);
               commentsHandler(res.data.comments as IComment[]);
