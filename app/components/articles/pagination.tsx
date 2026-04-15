@@ -28,7 +28,9 @@ const Pagination = () => {
   useEffect(() => {
     const getArticles = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/articles/count`);
+        const res = await axios.get(
+          `https://cloud-hoisting-six.vercel.app/api/articles/count`,
+        );
         console.log(res.data.count);
         // setnumOfPages(Number(res.data.count));
 

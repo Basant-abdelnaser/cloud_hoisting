@@ -20,7 +20,7 @@ const ArticlesPage = () => {
     const getArticles = async () => {
       try {
         const res = await axios.get<Article[]>(
-          `http://localhost:3000/api/articles?page=${page}`,
+          `https://cloud-hoisting-six.vercel.app/api/articles?page=${page}`,
         );
         setArticles(res.data);
       } catch (err) {

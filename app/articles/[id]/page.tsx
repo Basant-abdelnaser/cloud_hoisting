@@ -34,7 +34,7 @@ export default function ArticleDetails({ params }: ArticleDetailsProps) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/articles/${id}`, {
+    fetch(`https://cloud-hoisting-six.vercel.app/api/articles/${id}`, {
       cache: "no-store",
     })
       .then((res) => res.json())

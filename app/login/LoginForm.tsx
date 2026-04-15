@@ -36,7 +36,7 @@ const LoginForm = () => {
     if (!isValid) return;
     setLoading(true);
     axios
-      .post("http://localhost:3000/api/users/login", loginData)
+      .post("https://cloud-hoisting-six.vercel.app/api/users/login", loginData)
       .then((res) => {
         toast.success("Login Successful");
         router.replace("/"); //or push

@@ -23,7 +23,7 @@ const ArticlesTable = () => {
     const fetchArticles = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/articles?page=${page}`,
+          `https://cloud-hoisting-six.vercel.app/api/articles?page=${page}`,
         );
         setArticles(res.data);
       } catch (err) {

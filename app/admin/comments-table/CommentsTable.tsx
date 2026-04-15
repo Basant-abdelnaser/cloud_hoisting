@@ -15,7 +15,7 @@ const CommentsTable = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/comments")
+      .get("https://cloud-hoisting-six.vercel.app/api/comments")
       .then((res) => {
         setComments(res.data);
       })

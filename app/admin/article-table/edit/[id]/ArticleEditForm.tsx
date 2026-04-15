@@ -16,7 +16,7 @@ const ArticleEditForm = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/articles/${id}`)
+      .get(`https://cloud-hoisting-six.vercel.app/api/articles/${id}`)
       .then((res) => {
         setArticle(res.data);
       })

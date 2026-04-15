@@ -32,7 +32,7 @@ const HeaderClient = ({ user }: { user: User | null }) => {
 
   const handleLogout = async () => {
     axios
-      .get("http://localhost:3000/api/users/logout")
+      .get("https://cloud-hoisting-six.vercel.app/api/users/logout")
       .then((res) => {
         Cookies.remove("token");
         router.replace("/login");

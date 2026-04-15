@@ -35,7 +35,7 @@ const AddArticleForm = () => {
     setLoading(true);
 
     axios
-      .post("http://localhost:3000/api/articles", articleData)
+      .post("https://cloud-hoisting-six.vercel.app/api/articles", articleData)
       .then(() => {
         toast.success("Article Added Successfully");
         setArticleData({ title: "", description: "" });

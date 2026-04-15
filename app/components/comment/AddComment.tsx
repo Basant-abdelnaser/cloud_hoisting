@@ -25,7 +25,7 @@ const AddComment = ({
     } else {
       setLoading(true);
       axios
-        .post("http://localhost:3000/api/comments", {
+        .post("https://cloud-hoisting-six.vercel.app/api/comments", {
           text: comment,
           articleId,
         })

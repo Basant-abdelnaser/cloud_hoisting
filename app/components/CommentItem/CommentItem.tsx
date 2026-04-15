@@ -33,7 +33,7 @@ const CommentItem = ({
 
   const getNewComment = (newComment: string) => {
     axios
-      .put(`http://localhost:3000/api/comments/${comment.id}`, {
+      .put(`https://cloud-hoisting-six.vercel.app/api/comments/${comment.id}`, {
         text: newComment,
       })
       .then(() => {
@@ -50,7 +50,9 @@ const CommentItem = ({
   const handleDelete = () => {
     try {
       axios
-        .delete(`http://localhost:3000/api/comments/${comment.id}`)
+        .delete(
+          `https://cloud-hoisting-six.vercel.app/api/comments/${comment.id}`,
+        )
         .then(() => {
           toast.success("Comment deleted successfully");
         });
@@ -72,7 +74,7 @@ const CommentItem = ({
         <div>
           <p>{newComment}</p>
         </div>
-        { user && user.id === comment.userId && (
+        {user && user.id === comment.userId && (
           <div className="flex justify-end gap-3">
             <button
               className="p-2 rounded-full hover:bg-purple-200 transition-all duration-200 cursor-pointer"

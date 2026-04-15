@@ -46,7 +46,7 @@ const RegisterForm = () => {
     console.log(RegData);
     setloading(true);
     axios
-      .post("http://localhost:3000/api/users/register", RegData)
+      .post("https://cloud-hoisting-six.vercel.app/api/users/register", RegData)
       .then((res) => {
         toast.success("Registration Successful");
         router.replace("/"); //or push
